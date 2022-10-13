@@ -16,10 +16,14 @@
 #define	OPTION_LIST "bf:l:,ru"
 #define DEFAULT_VALUE 4
 #define DEFAULT_NAME "/tmp/trove"
+#define LINE_SIZE 100
 
 // GLOBAL FUNCTIONS
 extern void build();
 extern void update();
 extern void remove();
+extern void find_word();s
 extern int is_valid_word();
 
+//GLOBAL VARIABLES
+extern int word_length;

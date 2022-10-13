@@ -7,13 +7,20 @@ void usage(char *argv0){
     exit(EXIT_FAILURE);
 }
 
+
+
 int main(int argc, char *argv[]){
     char *trovefile = DEFAULT_NAME;
     char *filelist = NULL;
     char *word = NULL;
     int word_length = DEFAULT_VALUE; //default length of word
 
-    int isBuilding = 0; //1 if searching and 0 if trove wants to build file
+    bool buildFlag = false;
+    bool searchFlag = false;
+    bool updateFlag = false;
+    bool removeFlag = false;
+    bool lengthFLag = false;
+
 
     int option = 0;
     opterr	= 0;
@@ -31,35 +38,39 @@ int main(int argc, char *argv[]){
     }
 
     
-
-
- 
     while ((option = getopt(argc, argv, OPTION_LIST))!=-1){
         switch(option){
             //provided name of trove file
             case 'f':
+
                 trovefile = strdup(optarg);
+                searchFlag = true;
+
                 printf("File name %s\n", trovefile);
 
 
             //building trove file
             case 'b': 
                printf("building trove file\n");
+               buildFlag = true;
             
         
             //remove files
             case 'r':
                 printf("removing file\n");
+                removeFlag = true;
 
             //update files
             case 'u':
                 printf("updating file\n");
+                updateFlag = true;
 
 
             //appending word length to trove file
             case 'l':
                 word_length = atoi(optarg);
                 // how to pass this wordlength to word.c to validate ???
+                lengthFLag = true;
                 printf("adding n words to trove\n");
 
             //invalid cmd arguments option provided 
@@ -70,5 +81,18 @@ int main(int argc, char *argv[]){
 
     argc  -= optind;
     argv  += optind;
+
+
+    //determining what functions to be called. 
+
+    if (searchFlag){
+        find_word(word, trovefile);
+    }
+
+    if (buildFlag){
+        build(trovefile);
+    }
+
+
 
 }

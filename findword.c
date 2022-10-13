@@ -2,3 +2,11 @@
 
 
 #include "trove.h"
+
+
+void find_word(char *word, char *trovefile){
+    
+    
+}
+
+
