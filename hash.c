@@ -27,8 +27,6 @@ void hashtable_new(void){
 }
 
 
-
-
 //ADDING NEW FILE TO HASHTABLE 
 void hashtable_add(HASHTABLE *hashtable, char *filename, LIST *word){
     
@@ -38,8 +36,6 @@ void hashtable_add(HASHTABLE *hashtable, char *filename, LIST *word){
     //     ++index; //if space is occupied, move to kext space
     //     index %= HASHTABLE_SIZE;
     // }
-
-
     hashtable[index]->filename = filename;
     hashtable[index]->words = word;
 }
