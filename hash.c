@@ -21,10 +21,10 @@ uint32_t hash_string(char *filename)
     return hash;
 }
 
-HASHTABLE hashtable_new(void){
+HASHTABLE *hashtable_new(void){
     HASHTABLE *new = calloc(HASHTABLE_SIZE, sizeof(INDEXFILE *));
     CHECK_ALLOC(new);
-    return *new;
+    return new;
 }
 
 
@@ -32,11 +32,6 @@ HASHTABLE hashtable_new(void){
 void hashtable_add(HASHTABLE *hashtable, char *filename, LIST *word){
     
     int index = hash_string(filename) % HASHTABLE_SIZE; //hash code of filename
-
-    // while(hashtable[index] != NULL && hashtable[index]->filename != -1){
-    //     ++index; //if space is occupied, move to kext space
-    //     index %= HASHTABLE_SIZE;
-    // }
     hashtable[index]->filename = filename;
     hashtable[index]->words = word;
 }

@@ -52,11 +52,10 @@ extern void list_print(LIST *list);
 
 
 
-extern HASHTABLE hashtable_new();
+extern HASHTABLE *hashtable_new(void);
 extern void hashtable_add(HASHTABLE *hashtable, char *filename, LIST *word);
 extern INDEXFILE *hashtable_search(HASHTABLE *hashtable, char *filename);
 extern void hashtable_print(HASHTABLE *hashtable);
 
 //GLOBAL VARIABLES
 extern int word_length;
-extern HASHTABLE hashtable;

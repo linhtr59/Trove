@@ -6,7 +6,7 @@ CFLAGS  =  -Wall -Werror
 
 PROJECT =  trove
 DEPS =  trove.h
-OBJ     =  trove.o build.o hash.o list.o findword.o fileprocessing.o update.o remove.o
+OBJ     =  trove.o build.o hash.o globals.o list.o findword.o fileprocessing.o update.o remove.o
 
 
 $(PROJECT) : $(OBJ)
@@ -14,6 +14,9 @@ $(PROJECT) : $(OBJ)
 
 trove.o : trove.c $(DEPS)
 	$(C11)	$(CFLAGS)	-c	trove.c
+
+globals.o : globals.c $(DEPS)
+	$(C11)	$(CFLAGS)	-c	globals.c
 
 fileprocessing.o : fileprocessing.c $(DEPS)
 	$(C11)	$(CFLAGS)	-c	fileprocessing.c

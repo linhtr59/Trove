@@ -15,7 +15,6 @@
 #include <sys/param.h>
 #include <ctype.h>
 
-
 // PREPROCESSOR CONSTANTS
 #define	OPTION_LIST "bruf:l:"
 #define DEFAULT_VALUE 4
@@ -24,28 +23,12 @@
 #define	CHECK_ALLOC(p) if(p == NULL) { perror(__func__); exit(EXIT_FAILURE); }
 
 
-bool is_valid_word(char *word, int word_length){
-    char c = *word;
-    int c_length = strlen(word);
-
-    //IF WORD CHARACTER IS LESS THAN SPECIFIED VALUE
-    if (c_length <= word_length){ 
-        return false;
-    }
-
-    //CHECK IF EACH CHARACTER OF WORD IS ALPHANUMERIC, IF ANY ISNT, RETURN FALSE
-    while(c != '\0'){
-        if (!isalnum(c)){
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
 void file_reader(char *filename){
-    int size = 0;
+    //creating a linkedlist of all valid words in the file 
+    // LIST *wordlist = list_new();
+
+    //creating a hashmap mapping filename to the linkedlist containing all valid words in file
+    // HASHTABLE *hashtable = hashtable_new();
     //open file for reading
     FILE *file = fopen(filename, "r");
     if(file == NULL) {
@@ -53,27 +36,38 @@ void file_reader(char *filename){
         exit(EXIT_FAILURE);
     }
 
+    char line[BUFSIZ];
+    size_t got;
 
-    struct stat sb;
-    if (stat(filename, &sb) == -1){
-        perror("stat");
-        exit(EXIT_FAILURE);
+    while((got = fread(line, 1, sizeof line, file)) >0 ){
+        int length = 0;
+        for (int i =0; i < BUFSIZ; i++){
+            //IFF ALPHANUMERIC CHARACTER DETECTED IN WORD, INCREMENT CURRENT SIZE
+            if(isalnum(line[i])){
+                length++;
+                continue;
+            }
+
+            //IFF A NON ALPHANUM CHARACTER IS DETECTED AND THE WORD STILL HAD NOT EXCEED MINIMUM LENGTH, RESET THE CURRENT SIZE
+            else if(!isalnum(line[i]) && length < DEFAULT_VALUE){
+                length = 0;
+                continue;
+            }
+            
+
+            //IFF WORD MEET REQUIREMENT, STORE IT INTO THE LINKED LIST OF WORDS
+            else if(!isalnum(line[i]) && length >= DEFAULT_VALUE){
+                char *word_content = malloc(sizeof(char) * (length +1));
+                for (int j = 0; j < length; j++){
+                    word_content[j] = line[i - length + j];
+                    word_content[length] = '\0';
+                }
+
+                length = 0;
+                printf ("%s\n", word_content);
+             }
+        }
     }
-
-
-
-    char *word_content; 
-    word_content= (char*) malloc(sb.st_size);
-    CHECK_ALLOC(word_content);
-
-    //reading file word by word, checking if it is a valid word and if yes adding it to the hashtable with the filename
-    while (fscanf(file, "%[^-\n] ", word_content) != EOF){
-        // if (is_valid_word(word_content, DEFAULT_VALUE)){
-            printf("%s \n", word_content);
-            // hashtable_add(hashtable, filename, word_content); // adding key-value pair to hashtable
-        // }
-    }
-
     fclose(file);
 }
 
@@ -122,7 +116,7 @@ void scan_directory (char *dirname){
         //if file is reg file, pass that to file_reader function for processing
         else if(S_ISREG(stat_pointer->st_mode)){
             printf("finding words in: %s\n", pathname);
-            // file_reader(pathname);
+            file_reader(pathname);
         }
         else{
             printf("\t%s is unknown\n", pathname);
@@ -134,5 +128,5 @@ void scan_directory (char *dirname){
 
 
 int main(void){
-    scan_directory("trove-sample-data/textfiles");
+    file_reader("trove-sample-data/csseduck.png");
 }

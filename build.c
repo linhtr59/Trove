@@ -23,10 +23,10 @@ void open_trove(void){
     strcpy(cmd, "zcat '");
     strcat(cmd, trovefile_name);
     strcat(cmd, "'");
-    if (file_exist(trovefile_name))
-    {
-        trovefile = popen(cmd, "r");
-    }
+    // if (file_exist(trovefile_name))
+    // {
+    //     trovefile = popen(cmd, "r");
+    // }
 
 }
 

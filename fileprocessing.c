@@ -24,15 +24,13 @@ bool is_valid_word(char *word, int word_length){
 }
 
 
-
 void file_reader(char *filename){
     //creating a linkedlist of all valid words in the file 
     LIST *wordlist = list_new();
 
 
     //creating a hashmap mapping filename to the linkedlist containing all valid words in file
-    HASHTABLE *hashtable = hashtable_new();
-
+    HASHTABLE *hashtable_file = hashtable_new();
 
     //open file for reading
     FILE *file = fopen(filename, "r");
@@ -41,27 +39,42 @@ void file_reader(char *filename){
         exit(EXIT_FAILURE);
     }
 
+    char line[BUFSIZ];
+    size_t got;
 
-    struct stat sb;
-    if (stat(filename, &sb) == -1){
-        perror("stat");
-        exit(EXIT_FAILURE);
-    }
+    while((got = fread(line, 1, sizeof line, file)) >0 ){
+        int length = 0;
+        for (int i =0; i < BUFSIZ; i++){
+            //IFF ALPHANUMERIC CHARACTER DETECTED IN WORD, INCREMENT CURRENT SIZE
+            if(isalnum(line[i])){
+                length++;
+                continue;
+            }
 
+            //IFF A NON ALPHANUM CHARACTER IS DETECTED AND THE WORD STILL HAD NOT EXCEED MINIMUM LENGTH, RESET THE CURRENT SIZE
+            else if(!isalnum(line[i]) && length < DEFAULT_VALUE){
+                length = 0;
+                continue;
+            }
+            
 
-    char *word_content = malloc(sb.st_size);
-    CHECK_ALLOC(word_content);
+            //IFF WORD MEET REQUIREMENT, STORE IT INTO THE LINKED LIST OF WORDS
+            else if(!isalnum(line[i]) && length >= DEFAULT_VALUE){
+                char *word_content = malloc(sizeof(char) * (length +1));
+                for (int j = 0; j < length; j++){
+                    word_content[j] = line[i - length + j];
+                    word_content[length] = '\0';
+                }
 
-    //reading file word by word, checking if it is a valid word and if yes adding it to the hashtable with the filename
-    while (fscanf(file, "%[^-\n ] ", word_content) != EOF){
-        if (is_valid_word(word_content, word_length)){
-            printf("%s \n", word_content);
-            list_add(wordlist, word_content);
+                length = 0;
+                printf ("%s\n", word_content);
+                list_add(wordlist, word_content);
+             }
         }
     }
 
-    hashtable_add(hashtable, filename, wordlist);
-    hashtable_print(hashtable);
+    list_print(wordlist);
+    hashtable_add(hashtable_file, filename, wordlist);
     fclose(file);
 }
 

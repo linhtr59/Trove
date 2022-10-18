@@ -6,8 +6,6 @@
 
 #include "list.h"
 
-
-
 LIST *list_new(void){
     LIST *list = (LIST *)malloc(sizeof(LIST));
     CHECK_ALLOC(list);
@@ -76,11 +74,4 @@ void list_print(LIST *list)
         }
 	printf("\n");
     }
-}
-
-
-
-int main(void){
-    LIST *new_list = list_new();
-    
 }

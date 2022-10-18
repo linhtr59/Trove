@@ -12,30 +12,18 @@ void usage(char *argv0){
 
 int main(int argc, char *argv[]){
     char *trovefile = DEFAULT_NAME;
-    char *filelist = NULL;
-    char *word = NULL;
-    int word_length = DEFAULT_VALUE; //default length of word
-
-    bool buildFlag = false;
-
-
-    // HASHTABLE hashtable = hashtable_new(); // creating new empty hashtable to be built upon
-
-
     int option = 0;
     opterr	= 0;
+    bool buildFlag = false;
+
+    HASHTABLE *hashtable_file = hashtable_new();
 
     if(argc <= 0 || argc >5){ // Display program's usage
         usage(argv[0]);
     }
-    else if(argc == 3){ // if given first prompt, assign last commandline argument to be the word to find
-        word = argv[argc-1];
-    }
 
 
-    else if(argc > 3){ // if not first prompt, assign last commandline argument to be the filelist
-        filelist = argv[argc -1];
-    }
+
 
     
     while ((option = getopt(argc, argv, OPTION_LIST))!=-1){
@@ -78,11 +66,12 @@ int main(int argc, char *argv[]){
     argc  -= optind;
     argv  += optind;
 
+    if (buildFlag){
+        build(argc, argv, *hashtable_file, DEFAULT_VALUE);
+    }
+
+
 
     //determining what functions to be called. 
-
-    if (buildFlag){
-        build(argc, argv, hashtable, word_length);
-    }
 
 }

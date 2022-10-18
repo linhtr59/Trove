@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
+#include "list.h"
 #include "hash.h"
 #define HASHTABLE_SIZE 10000
 
@@ -33,11 +35,6 @@ HASHTABLE *hashtable_new(void){
 void hashtable_add(HASHTABLE *hashtable, char *filename, LIST *word){
     
     int index = hash_string(filename) % HASHTABLE_SIZE; //hash code of filename
-
-    // while(hashtable[index] != NULL && hashtable[index]->filename != -1){
-    //     ++index; //if space is occupied, move to kext space
-    //     index %= HASHTABLE_SIZE;
-    // }
     hashtable[index]->filename = filename;
     hashtable[index]->words = word;
 }
@@ -58,9 +55,15 @@ INDEXFILE *hashtable_search(HASHTABLE *hashtable, char *filename){
     return NULL;
 }
 
+void hashtable_print(HASHTABLE *hashtable){
 
-
-int main(void){
-    HASHTABLE *hashtable = hashtable_new();
+    for (int i =0; i < HASHTABLE_SIZE; i ++){
+        if (hashtable[i] != NULL){
+            printf("-----start-------\n");
+            printf("hashtable key: %s", hashtable[i]->filename);
+            list_print(hashtable[i]->words);
+            printf("-----end-------\n");
+        }
+    }
 }
 

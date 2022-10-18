@@ -8,6 +8,9 @@
 #include <unistd.h>
 #include <dirent.h>
 
+#ifndef LIST_H
+#define LIST_H
+
 #define	CHECK_ALLOC(p) if(p == NULL) { perror(__func__); exit(EXIT_FAILURE); }
 
 typedef struct _list {
@@ -20,5 +23,7 @@ extern LIST *list_new(void);
 extern bool list_find(LIST *list, char *wanted);
 extern LIST *list_new_item(char *word);
 extern LIST *list_add(LIST *list, char *word);
+extern void list_print(LIST *list);
 
 
+#endif
