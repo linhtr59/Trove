@@ -2,6 +2,6 @@
 
 #include "trove.h"
 
-void remove(){
+void remove(char *trovefile, int word_length, char *filelist){
     
 }

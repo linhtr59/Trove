@@ -2,6 +2,8 @@
 
 #include "trove.h"
 
-void update(){
+void update(char *trovefile, int word_length, char *filelist){
 
 }
+
+

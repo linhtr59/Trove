@@ -3,7 +3,8 @@
 
 void usage(char *argv0){
 //report error in commandline processing
-    fprintf(stderr, "Usage: %s [-f trovefile] word or\n %s [-f trovefile] [-b | -r | -u] [-l length] filelist", argv0, argv0);
+    fprintf(stderr, "Usage: %s [-f trovefile] word or %s [-f trovefile] [-b|-r |-u] [-l length] filelist",
+                             argv0, argv0);
     exit(EXIT_FAILURE);
 }
 
@@ -16,10 +17,9 @@ int main(int argc, char *argv[]){
     int word_length = DEFAULT_VALUE; //default length of word
 
     bool buildFlag = false;
-    bool searchFlag = false;
-    bool updateFlag = false;
-    bool removeFlag = false;
-    bool lengthFLag = false;
+
+
+    // HASHTABLE hashtable = hashtable_new(); // creating new empty hashtable to be built upon
 
 
     int option = 0;
@@ -44,7 +44,6 @@ int main(int argc, char *argv[]){
             case 'f':
 
                 trovefile = strdup(optarg);
-                searchFlag = true;
 
                 printf("File name %s\n", trovefile);
 
@@ -58,19 +57,16 @@ int main(int argc, char *argv[]){
             //remove files
             case 'r':
                 printf("removing file\n");
-                removeFlag = true;
 
             //update files
             case 'u':
                 printf("updating file\n");
-                updateFlag = true;
 
 
             //appending word length to trove file
             case 'l':
                 word_length = atoi(optarg);
                 // how to pass this wordlength to word.c to validate ???
-                lengthFLag = true;
                 printf("adding n words to trove\n");
 
             //invalid cmd arguments option provided 
@@ -85,14 +81,8 @@ int main(int argc, char *argv[]){
 
     //determining what functions to be called. 
 
-    if (searchFlag){
-        find_word(word, trovefile);
-    }
-
     if (buildFlag){
-        build(trovefile);
+        build(argc, argv, hashtable, word_length);
     }
-
-
 
 }
