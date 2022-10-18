@@ -43,7 +43,7 @@ void scan_directory (char *dirname){
     char pathname[MAXPATHLEN]; //name of path REGARDLESS of whether its full or relative
     char absolute_path[MAXPATHLEN];//absolute pathname of a file
 
-    DIR* dir= opendir("dirname");
+    DIR* dir= opendir(dirname);
     struct dirent* dp;
 
     //report error if directory cannot be opened

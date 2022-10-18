@@ -25,6 +25,7 @@
 
 
 void file_reader(char *filename){
+    int size = 0;
     //open file for reading
     FILE *file = fopen(filename, "r");
     if(file == NULL) {
@@ -40,12 +41,14 @@ void file_reader(char *filename){
     }
 
 
-    char *word_content = malloc(sb.st_size);
+
+    char *word_content; 
+    word_content= (char*) malloc(sb.st_size);
     CHECK_ALLOC(word_content);
 
     //reading file word by word, checking if it is a valid word and if yes adding it to the hashtable with the filename
     while (fscanf(file, "%[^-\n ] ", word_content) != EOF){
-        if (isalnum(word_content) && sizeof(word_content) >= DEFAULT_VALUE){
+        if (isalnum(*word_content) && sizeof(word_content) >= DEFAULT_VALUE){
             printf("%s \n", word_content);
             // hashtable_add(hashtable, filename, word_content); // adding key-value pair to hashtable
         }
