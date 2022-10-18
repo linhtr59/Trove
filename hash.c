@@ -21,9 +21,10 @@ uint32_t hash_string(char *filename)
     return hash;
 }
 
-void hashtable_new(void){
+HASHTABLE hashtable_new(void){
     HASHTABLE *new = calloc(HASHTABLE_SIZE, sizeof(INDEXFILE *));
     CHECK_ALLOC(new);
+    return *new;
 }
 
 
@@ -56,7 +57,19 @@ INDEXFILE *hashtable_search(HASHTABLE *hashtable, char *filename){
     return NULL;
 }
 
+void hashtable_print(HASHTABLE *hashtable){
 
+    for (int i =0; i < HASHTABLE_SIZE; i ++){
+        if (hashtable[i] != NULL){
+            printf("-----start-------\n");
+            printf("hashtable key: %s", hashtable[i]->filename);
+            list_print(hashtable[i]->words);
+            printf("-----end-------\n");
+        }
+    }
+
+
+}
 
 
 

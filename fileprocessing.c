@@ -1,12 +1,39 @@
 //recursively traverse the directories and find files based off requirements
-
 #include "trove.h"
 #include <dirent.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/param.h>
 
+bool is_valid_word(char *word, int word_length){
+    char c = *word;
+    int c_length = strlen(word);
+
+    //IF WORD CHARACTER IS LESS THAN SPECIFIED VALUE
+    if (c_length <= word_length){ 
+        return false;
+    }
+
+    //CHECK IF EACH CHARACTER OF WORD IS ALPHANUMERIC, IF ANY ISNT, RETURN FALSE
+    while(c != '\0'){
+        if (!isalnum(c)){
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
 void file_reader(char *filename){
+    //creating a linkedlist of all valid words in the file 
+    LIST *wordlist = list_new();
+
+
+    //creating a hashmap mapping filename to the linkedlist containing all valid words in file
+    HASHTABLE *hashtable = hashtable_new();
+
+
     //open file for reading
     FILE *file = fopen(filename, "r");
     if(file == NULL) {
@@ -29,11 +56,12 @@ void file_reader(char *filename){
     while (fscanf(file, "%[^-\n ] ", word_content) != EOF){
         if (is_valid_word(word_content, word_length)){
             printf("%s \n", word_content);
-            hashtable_add(hashtable, filename, word_content); // adding key-value pair to hashtable
+            list_add(wordlist, word_content);
         }
     }
-    
 
+    hashtable_add(hashtable, filename, wordlist);
+    hashtable_print(hashtable);
     fclose(file);
 }
 
@@ -77,13 +105,13 @@ void scan_directory (char *dirname){
 
         //if the "file" is a directory, recursively search that directory again
         else if(S_ISDIR(stat_pointer->st_mode)){
-            printf("%s is a directory\n", pathname);
+            printf("reading directory: %s \n", pathname);
             scan_directory(pathname); //recrusive
         }
 
         //if file is reg file, pass that to file_reader function for processing
         else if(S_ISREG(stat_pointer->st_mode)){
-            printf("%s is a normal file\n", pathname);
+            printf("finding word in: %s\n", pathname);
             file_reader(pathname);
         }
         else{

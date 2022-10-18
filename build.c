@@ -56,9 +56,21 @@ void gzip_trove(void){
 void build(int argc, char *argv[], HASHTABLE hashtable, int word_length){
     char *filelist = argv[argc -1];
 
-
+    //OPEN TROVE FILE FOR WRITING
     trovefile = fopen(trovefile_name, "w+"); //opening trovefile for writing;
+    printf("building trovefile: %s", trovefile_name);
+
+
+    //TRAVERSING THE DIRECTORIES AND CONSTRUCTING THE HASHTABLE 
+    scan_directory(filelist);
+
+
+
+    //WRITING THE TROVEFILE
+    printf("writing trovefile");
     fseek(trovefile, 0, SEEK_SET);
+    //fputs something there
 
     gzip_trove();
+    printf("compressing trovefile: %s", trovefile_name);
 }

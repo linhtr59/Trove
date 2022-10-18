@@ -24,6 +24,26 @@
 #define	CHECK_ALLOC(p) if(p == NULL) { perror(__func__); exit(EXIT_FAILURE); }
 
 
+bool is_valid_word(char *word, int word_length){
+    char c = *word;
+    int c_length = strlen(word);
+
+    //IF WORD CHARACTER IS LESS THAN SPECIFIED VALUE
+    if (c_length <= word_length){ 
+        return false;
+    }
+
+    //CHECK IF EACH CHARACTER OF WORD IS ALPHANUMERIC, IF ANY ISNT, RETURN FALSE
+    while(c != '\0'){
+        if (!isalnum(c)){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 void file_reader(char *filename){
     int size = 0;
     //open file for reading
@@ -47,11 +67,11 @@ void file_reader(char *filename){
     CHECK_ALLOC(word_content);
 
     //reading file word by word, checking if it is a valid word and if yes adding it to the hashtable with the filename
-    while (fscanf(file, "%[^-\n ] ", word_content) != EOF){
-        if (isalnum(*word_content) && sizeof(word_content) >= DEFAULT_VALUE){
+    while (fscanf(file, "%[^-\n] ", word_content) != EOF){
+        // if (is_valid_word(word_content, DEFAULT_VALUE)){
             printf("%s \n", word_content);
             // hashtable_add(hashtable, filename, word_content); // adding key-value pair to hashtable
-        }
+        // }
     }
 
     fclose(file);
@@ -95,14 +115,14 @@ void scan_directory (char *dirname){
 
         //if the "file" is a directory, recursively search that directory again
         else if(S_ISDIR(stat_pointer->st_mode)){
-            printf("%s is a directory\n", pathname);
+            printf("reading directory: %s\n", pathname);
             scan_directory(pathname); //recrusive
         }
 
         //if file is reg file, pass that to file_reader function for processing
         else if(S_ISREG(stat_pointer->st_mode)){
-            printf("%s is a normal file\n", pathname);
-            file_reader(pathname);
+            printf("finding words in: %s\n", pathname);
+            // file_reader(pathname);
         }
         else{
             printf("\t%s is unknown\n", pathname);
@@ -114,5 +134,5 @@ void scan_directory (char *dirname){
 
 
 int main(void){
-    file_reader("trove-sample-data/csseduck.png");
+    scan_directory("trove-sample-data/textfiles");
 }

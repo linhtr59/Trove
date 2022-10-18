@@ -8,10 +8,7 @@
 #include <getopt.h>
 #include <limits.h>
 #include <unistd.h>
-
 #include <dirent.h>
-
-
 
 
 // PREPROCESSOR CONSTANTS
@@ -26,7 +23,7 @@
 typedef struct _list {
      char           *word;
      struct _list   *next;
-} LIST;
+}LIST;
 
 
 typedef struct _index_file{
@@ -45,12 +42,20 @@ extern void build(int argc, char *argv[], HASHTABLE hashtable, int word_length);
 extern void scan_directory (char *dirname);
 extern bool is_valid_word(char *word, int value);
 
+extern LIST *list_new(void);
+extern bool list_find(LIST *list, char *wanted);
+extern LIST *list_new_item(char *word);
+extern LIST *list_add(LIST *list, char *word);
+extern void list_remove(LIST *list, char *word);
+extern void list_print(LIST *list);
 
 
-extern void hashtable_new();
+
+
+extern HASHTABLE hashtable_new();
+extern void hashtable_add(HASHTABLE *hashtable, char *filename, LIST *word);
 extern INDEXFILE *hashtable_search(HASHTABLE *hashtable, char *filename);
-extern INDEXFILE *hashtable_search(HASHTABLE *hashtable, char *filename);
-
+extern void hashtable_print(HASHTABLE *hashtable);
 
 //GLOBAL VARIABLES
 extern int word_length;
