@@ -15,12 +15,14 @@ LIST *list_new(void){
 
 //FIND IF WORD EXIST IN LIST ALREADY
 bool list_find(LIST *list, char *wanted){
+
     while(list != NULL){
         if (strcmp(list->word, wanted) == 0){
             return true;
         }
+        list = list->next;
     }
-    list = list->next;
+
     return false;
 }
 
@@ -31,12 +33,14 @@ LIST *list_new_item(char *word){
     CHECK_ALLOC(new);
 
     new->word = strdup(word);
-    new->next = list_new();
+    CHECK_ALLOC(new->word);
+    new->next = NULL;
     return new;
 
 }
 
-LIST *list_add(LIST *list, char *word){
+LIST *list_add(LIST *list, char *word)
+{
     if (list_find(list, word)){
         return list;
     }
