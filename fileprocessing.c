@@ -25,15 +25,16 @@ bool is_valid_word(char *word, int word_length){
 
 
 
-void file_reader(char *filename){
-    //creating a linkedlist of all valid words in the file 
-    LIST *wordlist = list_new();
+void file_reader(char *filename, HASHTABLE *hashtable, LIST *wordlist){
+    //open file for reading
+    FILE *file = fopen(filename, "r");
 
-
-    //creating a hashmap mapping filename to the linkedlist containing all valid words in file
-    HASHTABLE *hashtable = hashtable_new();
-
-
+    if(file == NULL) {
+        fprintf(stderr, "File does not exist or cannot be opened '%s'\n", filename);
+        exit(EXIT_FAILURE);
+    }
+    
+    
     //open file for reading
     FILE *file = fopen(filename, "r");
     if(file == NULL) {
@@ -67,7 +68,7 @@ void file_reader(char *filename){
 
 
 //RECURSIVELY TRAVERSE ALL DIRECTORIES AND ITS SUBDIRECTORIES 
-void scan_directory (char *dirname){
+void scan_directory (char *dirname, HASHTABLE *hashtable, LIST *wordlist){
     char pathname[MAXPATHLEN]; //name of path REGARDLESS of whether its full or relative
     char absolute_path[MAXPATHLEN];//absolute pathname of a file
 
@@ -76,7 +77,7 @@ void scan_directory (char *dirname){
 
     //report error if directory cannot be opened
     if (dir == NULL){
-        perror("no directory");
+        perror("no directory found");
         exit(EXIT_FAILURE);
     }
 
@@ -95,8 +96,6 @@ void scan_directory (char *dirname){
         realpath(pathname, absolute_path);
 
 
-
-
         //ensures path can be accessed
         if (stat(absolute_path, stat_pointer) != 0){
             perror(absolute_path);
@@ -106,13 +105,13 @@ void scan_directory (char *dirname){
         //if the "file" is a directory, recursively search that directory again
         else if(S_ISDIR(stat_pointer->st_mode)){
             printf("reading directory: %s \n", pathname);
-            scan_directory(pathname); //recrusive
+            scan_directory(pathname, hashtable, wordlist); //recrusive
         }
 
         //if file is reg file, pass that to file_reader function for processing
         else if(S_ISREG(stat_pointer->st_mode)){
             printf("finding word in: %s\n", pathname);
-            file_reader(pathname);
+            file_reader(pathname, hashtable, wordlist);
         }
         else{
             printf("\t%s is unknown\n", pathname);
