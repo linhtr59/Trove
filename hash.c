@@ -72,5 +72,19 @@ void hashtable_print(HASHTABLE *hashtable){
 }
 
 
+//GIVEN A HASHTABLE, REMOVE ANY ENTRY WHICH FILENAME MATCHES TARGET
+void hashtable_remove(HASHTABLE *hashtable, char *target){
+    uint32_t index = hash_string(target);
+    while (hashtable[index] != NULL){
+        if (hashtable[index]->filename == target){
+            INDEXFILE *temp = hashtable[index];
+            hashtable[index] = temp;
+        }
+        ++index;
+    }
+
+}
+
+
 
 
