@@ -74,7 +74,6 @@ extern void hashtable_print(HASHTABLE *hashtable);
 //SEARCH WORD FUNCTIONS
 extern void find_word(int argc, char *argv[]);
 
-
 //GLOBAL VARIABLES
 extern int word_length;
 extern char *trovefile;
