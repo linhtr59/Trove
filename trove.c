@@ -66,7 +66,6 @@ int main(int argc, char *argv[]){
             //appending word length to trove file
             case 'l':
                 word_length = atoi(optarg);
-                // how to pass this wordlength to word.c to validate ???
                 printf("adding n words to trove\n");
 
             //invalid cmd arguments option provided 
