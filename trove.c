@@ -18,6 +18,7 @@ int main(int argc, char *argv[]){
 
     bool buildFlag = false;
     bool removaFlag = false;
+    bool updateFlag = false;
 
 
     // HASHTABLE hashtable = hashtable_new(); // creating new empty hashtable to be built upon
@@ -62,6 +63,7 @@ int main(int argc, char *argv[]){
 
             //update files
             case 'u':
+                updateFlag = true;
                 printf("updating file\n");
 
 
@@ -88,5 +90,12 @@ int main(int argc, char *argv[]){
     
     else if (removeFlag){
         remove(filelist ,word_length, trovefile);
+    }
+    
+    else if (updateFlag){
+        update(trovefile, word_length, filelist);
+    }
+    
+    
 
 }
