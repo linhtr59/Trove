@@ -17,6 +17,7 @@ int main(int argc, char *argv[]){
     int word_length = DEFAULT_VALUE; //default length of word
 
     bool buildFlag = false;
+    bool removaFlag = false;
 
 
     // HASHTABLE hashtable = hashtable_new(); // creating new empty hashtable to be built upon
@@ -56,6 +57,7 @@ int main(int argc, char *argv[]){
         
             //remove files
             case 'r':
+                removeFlag = true;
                 printf("removing file\n");
 
             //update files
@@ -83,5 +85,8 @@ int main(int argc, char *argv[]){
     if (buildFlag){
         build(argc, argv, hashtable, word_length);
     }
+    
+    else if (removeFlag){
+        remove(filelist ,word_length, trovefile);
 
 }
